@@ -1,0 +1,16 @@
+/* DashboardPage.css */
+.centered-tabmenu .p-tabmenu-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%; /* Asegura que la barra de navegación ocupe todo el ancho */
+  }
+  
+  .centered-tabmenu .p-tabmenu-nav li {
+    margin-right: 0; /* Elimina el margen derecho por defecto entre los items */
+  }
+  
+  .centered-tabmenu .p-tabmenu-nav a {
+    /* Puedes ajustar el espaciado interno de cada item si lo deseas */
+    padding: 1rem;
+  }
+
