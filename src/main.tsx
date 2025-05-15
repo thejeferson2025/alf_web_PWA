@@ -8,7 +8,7 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 
 import App from './App.tsx';
-import { AuthProvider } from './pages/login/AuthContext.tsx'; // <-- importar el AuthProvider
+import { AuthProvider } from './pages/login/AuthContext'; // <-- importar el AuthProvider
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -9,6 +9,8 @@ import { useAuth } from './pages/login/AuthContext';
 import DashboardPage from './pages/dashboard';
 import PrivateRoute from './pages/login/PrivateRoute';
 import './App.css';
+import CardsGrid from './pages/ejemplo';
+import MainLayout from './Layouts/MainLayout';
 
 // Página de Login
 function LoginPage() {
@@ -18,21 +20,43 @@ function LoginPage() {
   const toast = useRef<Toast>(null);
   const { isAuthenticated, login } = useAuth();
 
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
+
+  // Redirección inmediata si ya está autenticado
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
+    if (isAuthenticated && !justLoggedIn) {
+      navigate('/dashboard', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, justLoggedIn, navigate]);
 
   const handleLogin = () => {
     if (username === 'DEMO01' && password === '2025') {
-      login(); // Marcar como autenticado
-      navigate('/dashboard'); 
+      login();
+      setJustLoggedIn(true);
     } else {
-      toast.current?.show({severity:'error', summary: 'Error', detail:'Usuario o Contraseña incorrecto', life: 3000});
-     
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Usuario o Contraseña incorrecto',
+        life: 3000
+      });
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated && justLoggedIn) {
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Ingreso correcto',
+        life: 500
+      });
+
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 500);
+    }
+  }, [isAuthenticated, justLoggedIn, navigate]);
 
   return (
     <div className="flex align-items-center justify-content-center min-h-screen surface-ground px-4">
@@ -40,7 +64,7 @@ function LoginPage() {
         <div className="text-center mb-4">
           <i className="pi pi-user text-4xl text-primary"></i>
           <h2 className="text-2xl font-bold mt-2">Alf</h2>
-          <p className="text-secondary">Ingresa tus credenciales</p>
+          <p className="text-secondary">Ingreso de credenciales</p>
         </div>
 
         <div className="p-fluid">
@@ -50,7 +74,7 @@ function LoginPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="mb-4"
-            placeholder="Usuario01"
+            placeholder="Ingrese su usuario"
           />
 
           <label htmlFor="password" className="block mb-2 font-medium">Contraseña</label>
@@ -61,25 +85,25 @@ function LoginPage() {
             toggleMask
             feedback={false}
             className="mb-4"
-            placeholder="*************"
+            placeholder="Ingrese su contraseña"
             inputClassName="w-full"
           />
-          <Button label="Iniciar sesión" icon="pi pi-sign-in" onClick={handleLogin} className="w-full mt-2" />
+          <Button label="Iniciar sesión" icon="pi pi-sign-in" iconPos="right" onClick={handleLogin} className="w-full mt-2" />
         </div>
       </Card>
       <Toast ref={toast} />
     </div>
-
   );
 }
+
 
 // Rutas de la App
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/dashboard"
-        element={ <PrivateRoute> <DashboardPage /> </PrivateRoute> } />
+      <Route path="/" element={ <LoginPage /> } />
+      <Route path="/dashboard" element={ <><MainLayout /><PrivateRoute><DashboardPage /></PrivateRoute></> } />
+      <Route path="/ejemplo" element={<><PrivateRoute><CardsGrid /></PrivateRoute><MainLayout /></>} />
     </Routes>
   );
 }

@@ -1,78 +1,17 @@
-/*import { useNavigate } from 'react-router-dom';
-import { useAuth } from './login/AuthContext';
-import { TabMenu } from 'primereact/tabmenu';
-import { MenuItem } from 'primereact/menuitem';
-import { Button } from 'primereact/button';
-import './dashboard.css'; // Importa el archivo CSS
-
-export default function DashboardPage() {
-    const { logout } = useAuth();
-    const navigate = useNavigate();
-  
-    const handleLogout = () => {
-      logout();
-      navigate('/');
-    };
-
-    const items: MenuItem[] = [
-        { label: 'Dashboard', icon: 'pi pi-home' },
-        { label: 'Transactions', icon: 'pi pi-chart-line' },
-        { label: 'Products', icon: 'pi pi-list' },
-        { label: 'Messages', icon: 'pi pi-inbox'}
-    ];
-
-
-
-
-
-  return (
-    
- 
-
-    
-<div >
-<Button label="Cerrar sesión" icon="pi pi-sign-out" onClick={handleLogout} style={{ float: 'right' }} />
-
-  <TabMenu model={items} className="centered-tabmenu" />  
-</div>
- 
-
-
-
-   
-  
-  );
-}*/
-
-
 
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './login/AuthContext';
-import { useEffect, useRef, useState } from 'react';
-// --- Importaciones de PrimeReact ---
-import { TabMenu } from 'primereact/tabmenu';
-import { MenuItem } from 'primereact/menuitem';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { Menu } from 'primereact/menu';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { Fieldset } from 'primereact/fieldset';
-        
-// --- Fin de Importaciones de PrimeReact ---
-
+import { MenuItem } from 'primereact/menuitem';
+import { useEffect, useState } from 'react';
 // --- Importar el servicio API ---
-import { getVentasHoy, getComprasHoy, getCtasPorCobrarTotal, getCtasPorPagarTotal } from '../services/apiServices'; // Ajusta la ruta según dónde guardes apiService.ts
-// --- Fin de Importar el servicio API ---
-
+import { getVentasHoy, getComprasHoy, getCtasPorCobrarTotal, getCtasPorPagarTotal } from '../services/apiServices';
 import './dashboard.css';
-
-
-// --- Define Interfaces de TypeScript (pueden venir del servicio o de un archivo central de tipos) ---
+import { Dropdown } from 'primereact/dropdown';
+// --- Define Interfaces de TypeScript
 interface Venta { registros: number; valor: number; }
 interface Compra { registros: number; valor: number; }
 interface PorCobrar { suma_total_saldo_cxc: number; }
 interface PorPagar { suma_total_saldo_cxp: number; }
-// --- Fin de Interfaces ---
 
 // ... (función formatCurrency igual) ...
 const formatCurrency = (amount: number | undefined | null): string => {
@@ -101,7 +40,9 @@ const formatNumber = (amount: number): string => {
 
 
 export default function DashboardPage() {
-  const { logout } = useAuth();
+    
+    
+  
   const navigate = useNavigate();
 
   const [cargando, setCargando] = useState(true);
@@ -111,23 +52,7 @@ export default function DashboardPage() {
   const [ctasPPagar, setCtasPPagar] = useState<PorPagar | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const ventasMenuRef = useRef<Menu>(null);
-  const ctasCobrarMenuRef = useRef<Menu>(null);
-  const comprasMenuRef = useRef<Menu>(null);
-  const ctasPagarMenuRef = useRef<Menu>(null);
 
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
-  const items: MenuItem[] = [
-      { label: 'Dashboard', icon: 'pi pi-home' },
-      { label: 'Transactions', icon: 'pi pi-chart-line' },
-      { label: 'Products', icon: 'pi pi-list' },
-      { label: 'Salir', icon: 'pi pi-inbox', command: handleLogout }
-  ];
 
   // --- Lógica de Obtención de Datos usando el servicio ---
   useEffect(() => {
@@ -182,11 +107,23 @@ export default function DashboardPage() {
   const totalCtasPPagarSaldo = ctasPPagar?.suma_total_saldo_cxp ?? 0;
 
 
-  const ventasMenuItems: MenuItem[] = [
-      { label: 'Artículos más Vendidos', icon: 'pi pi-cart-plus', command: () => { navigate('/articuloAltoValor'); }},
-      { label: 'Clientes más Rentables', icon: 'pi pi-users', command: () => { navigate('/clientesAltoValor'); }},
-      { label: 'Ventas Mensuales', icon: 'pi pi-chart-bar', command: () => { navigate('/ventasPorMes'); }}
-  ];
+const ventasMenuItems = [
+  {
+    label: 'Artículos más Vendidos',
+    icon: 'pi pi-cart-plus',
+    command: () => navigate('/ArticulosMasVendidos')
+  },
+  {
+    label: 'Clientes más Rentables',
+    icon: 'pi pi-users',
+    command: () => navigate('/clientesAltoValor')
+  },
+  {
+    label: 'Ventas Mensuales',
+    icon: 'pi pi-chart-bar',
+    command: () => navigate('/ejemplo')
+  }
+];
 
   const ctasCobrarMenuItems: MenuItem[] = [
       { label: 'Análisis de Cartera', icon: 'pi pi-wallet', command: () => { navigate('/analisisCarteraCC'); }},
@@ -204,17 +141,11 @@ export default function DashboardPage() {
        { label: 'Pendientes a Proveedores', icon: 'pi pi-dollar', command: () => { navigate('/pendientesProveedores'); }}
    ];
 
-
   // --- Renderizado Condicional (igual, pero con lógica de servicio) ---
   let content;
 
   if (cargando) {
-    content = (
-      <div className="p-d-flex p-jc-center p-ai-center p-overlay-mask" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.8)', zIndex: 1050 }}>
-        <ProgressSpinner style={{width: '50px', height: '50px'}} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />
-        <span className="p-ml-2">Cargando...</span>
-      </div>
-    );
+ 
   } else if (error) {
         content = (
             <div className="p-container p-mt-4">
@@ -259,143 +190,136 @@ export default function DashboardPage() {
          );
      }
    else {
-    content = (
-      <div className="p-m-1">
-        <div className="p-grid p-nogutter p-mb-4 p-gap-4">
-          {/* Tarjeta de Ventas */}
-          <div className="p-col-12 p-md-6">
-            <Card className="p-shadow-2 dashboard-card">
-              <div className="p-d-flex p-jc-between p-ai-center p-card-body">
-                <div>
-                  <h6 className="p-text-primary p-text-bold">
-                    <span className="p-text-primary p-text-2xl">{totalVentasRegistros}</span>
-                    {' '}Ventas (en el día)
-                  </h6>
-                  <h5 className="p-text-bold">{formatCurrency(totalVentasValor)}</h5>
-                </div>
-                <i className="pi pi-chart-line p-text-success p-text-4xl"></i>
-              </div>
-               <div className="p-card-footer">
-                   <Button
-                       label="Analizar"
-                       className="p-button-outlined p-button-primary p-button-sm p-px-4 p-py-2 w-full"
-                       onClick={(event) => ventasMenuRef.current?.toggle(event)}
-                       aria-controls="ventas_menu" aria-haspopup
-                   />
-                   <Menu model={ventasMenuItems} popup ref={ventasMenuRef} id="ventas_menu" />
-               </div>
-            </Card>
-          </div>
-          {/* Tarjeta de Cuentas por Cobrar */}
-           <div className="p-col-12 p-md-6">
-             <Card className="p-shadow-2 dashboard-card">
-              <div className="p-d-flex p-jc-between p-ai-center p-card-body">
-                <div>
-                  <h6 className="p-text-primary p-text-bold">
-                    Total cuentas por cobrar
-                  </h6>
-                  <h5 className="p-text-bold">{formatCurrency(totalCtasPCobrarSaldo)}</h5>
-                </div>
-                <i className="pi pi-arrow-up p-text-success p-text-4xl"></i>
-              </div>
-              <div className="p-card-footer">
-                  <Button
-                      label="Analizar"
-                      className="p-button-outlined p-button-primary p-button-sm p-px-4 p-py-2 w-full"
-                      onClick={(event) => ctasCobrarMenuRef.current?.toggle(event)}
-                       aria-controls="ctas_cobrar_menu" aria-haspopup
-                  />
-                  <Menu model={ctasCobrarMenuItems} popup ref={ctasCobrarMenuRef} id="ctas_cobrar_menu" />
-              </div>
-            </Card>
-          </div>
-        </div>
 
-         <div className="p-grid p-nogutter p-gap-4">
-           {/* Tarjeta de Compras */}
-          <div className="p-col-12 p-md-6">
-            <Card className="p-shadow-2 dashboard-card secondary-border">
-              <div className="p-d-flex p-jc-between p-ai-center p-card-body">
-                <div>
-                  <h6 className="p-text-primary p-text-bold">
-                    <span className="p-text-primary p-text-2xl">{totalComprasRegistros}</span>
-                    {' '}Compras (en el día)
-                  </h6>
-                  <h5 className="p-text-bold">{formatCurrency(totalComprasValor)}</h5>
-                </div>
-                <i className="pi pi-chart-line p-text-primary p-text-4xl"></i>
-              </div>
-              <div className="p-card-footer">
-                   <Button
-                       label="Analizar"
-                       className="p-button-outlined p-button-primary p-button-sm p-px-4 p-py-2 w-full"
-                       onClick={(event) => comprasMenuRef.current?.toggle(event)}
-                        aria-controls="compras_menu" aria-haspopup
-                   />
-                   <Menu model={comprasMenuItems} popup ref={comprasMenuRef} id="compras_menu" />
-              </div>
-            </Card>
+
+
+content = (
+  <div className="p-grid p-mt-3">
+    {/* Ventas del día */}
+    <div className="p-col-12 p-md-6">
+      <div className="card flex justify-content-center">
+        <Fieldset legend="Ventas del día" className="custom-fieldset md:w-25rem">
+          <div className="p-d-flex p-jc-between p-ai-center mb-3">
+            <div>
+              <h6 className="p-text-primary p-text-bold">
+                <span className="p-text-primary p-text-2xl">{totalVentasRegistros}</span>
+              </h6>
+              <h5 className="p-text-bold">{formatCurrency(totalVentasValor)}</h5>
+            </div>
           </div>
-           {/* Tarjeta de Cuentas por Pagar */}
-          <div className="p-col-12 p-md-6">
-            <Card className="p-shadow-2 dashboard-card secondary-border">
-              <div className="p-d-flex p-jc-between p-ai-center p-card-body">
-                <div>
-                  <h6 className="p-text-primary p-text-bold">
-                    Total cuentas por pagar
-                  </h6>
-                  <h5 className="p-text-bold">{formatCurrency(totalCtasPPagarSaldo)}</h5>
-                </div>
-                 <i className="pi pi-dollar p-text-primary p-text-4xl"></i>
-              </div>
-              <div className="p-card-footer">
-                   <Button
-                       label="Analizar"
-                       className="p-button-outlined p-button-primary p-button-sm p-px-4 p-py-2 w-full"
-                       onClick={(event) => ctasPagarMenuRef.current?.toggle(event)}
-                       aria-controls="ctas_pagar_menu" aria-haspopup
-                   />
-                   <Menu model={ctasPagarMenuItems} popup ref={ctasPagarMenuRef} id="ctas_pagar_menu" />
-              </div>
-            </Card>
+
+          <div className="p-mt-3">
+                <Dropdown
+                options={ventasMenuItems}
+                onChange={(e) => {
+                  e.value?.command?.();
+                }}
+                placeholder="Analizar"
+                className="w-full"
+                optionLabel="label"
+                value={null}
+                itemTemplate={(option) => (
+                  <div className="flex align-items-center">
+                    <i className={`${option.icon} mr-2`} />
+                    <span>{option.label}</span>
+                  </div>
+                )}
+              />
+
           </div>
-        </div>
+        </Fieldset>
       </div>
-    );
-  }
-  // --- Fin de Renderizado Condicional ---
+    </div>
 
+    {/* Cuentas por cobrar */}
+    <div className="p-col-12 p-md-6">
+      <div className="card flex justify-content-center">
+        <Fieldset legend="Total cuentas por cobrar" className="custom-fieldset md:w-25rem">
+          <div className="p-d-flex p-jc-between p-ai-center mb-3">
+            <div>
+              <h5 className="p-text-bold">{formatCurrency(totalCtasPCobrarSaldo)}</h5>
+            </div>
+          </div>
+
+          <div className="p-mt-3">
+            <Dropdown
+              options={ctasCobrarMenuItems}
+              onChange={(e) => console.log("Cuentas por cobrar:", e.value)}
+              placeholder="Analizar"
+              className="w-full"
+              optionLabel="label"
+              value={null}
+            />
+          </div>
+        </Fieldset>
+      </div>
+    </div>
+
+    {/* Compras del día */}
+    <div className="p-col-12 p-md-6">
+      <div className="card flex justify-content-center">
+        <Fieldset legend="Compras del día" className="custom-fieldset md:w-25rem">
+          <div className="p-d-flex p-jc-between p-ai-center mb-3">
+            <div>
+              <h6 className="p-text-primary p-text-bold">
+                <span className="p-text-primary p-text-2xl">{totalComprasRegistros}</span>
+              </h6>
+              <h5 className="p-text-bold">{formatCurrency(totalComprasValor)}</h5>
+            </div>
+          </div>
+
+          <div className="p-mt-3">
+            <Dropdown
+              options={comprasMenuItems}
+              onChange={(e) => console.log("Compras:", e.value)}
+              placeholder="Analizar"
+              className="w-full"
+              optionLabel="label"
+              value={null}
+            />
+          </div>
+        </Fieldset>
+      </div>
+    </div>
+
+    {/* Cuentas por pagar */}
+    <div className="p-col-12 p-md-6">
+      <div className="card flex justify-content-center">
+        <Fieldset legend="Total cuentas por pagar" className="custom-fieldset secondary-border md:w-25rem">
+          <div className="p-d-flex p-jc-between p-ai-center mb-3">
+            <div>
+              <h5 className="p-text-bold">{formatCurrency(totalCtasPPagarSaldo)}</h5>
+            </div>
+          </div>
+
+          <div className="p-mt-3">
+            <Dropdown
+              options={ctasPagarMenuItems}
+              onChange={(e) => console.log("Cuentas por pagar:", e.value)}
+              placeholder="Analizar"
+              className="w-full"
+              optionLabel="label"
+              value={null}
+            />
+          </div>
+        </Fieldset>
+      </div>
+    </div>
+  </div>
+);
+
+}
 
   return (
-     <div className="dashboard-page p-p-4">
-    {/* <div className="p-grid p-jc-end p-mb-3">
-      <div className="p-col-fixed" style={{ width: 'auto' }}>
-        <Button
-          label="Cerrar sesión"
-          icon="pi pi-sign-out"
-          onClick={handleLogout}
-          className="p-button-danger"
-        />
-      </div>
-    </div> */}
+  <div className="dashboard-page p-p-4">
 
-    <TabMenu model={items} className="centered-tabmenu p-mb-4" />
     {content}
-<div className="p-grid p-mt-4">
-  {[1, 2, 3, 4].map((num) => (
-    <div key={num} className="p-col-12 p-md-6">
-      <Fieldset legend={`Sección ${num}`} className="custom-fieldset">
-        <p className="m-0">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-        </p>
-      </Fieldset>
-    </div>
-  ))}
-</div>
 
-</div>
-
-    
-
+  </div>
+  
   );
 }
+
+
+
+  
