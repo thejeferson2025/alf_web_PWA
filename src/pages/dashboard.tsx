@@ -1,11 +1,10 @@
-
 import { useNavigate } from 'react-router-dom';
 import { Fieldset } from 'primereact/fieldset';
 import { MenuItem } from 'primereact/menuitem';
 import { useEffect, useState } from 'react';
 // --- Importar el servicio API ---
 import { getVentasHoy, getComprasHoy, getCtasPorCobrarTotal, getCtasPorPagarTotal } from '../services/apiServices';
-import './dashboard.css';
+import '../styles/dashboard.css';
 import { Dropdown } from 'primereact/dropdown';
 // --- Define Interfaces de TypeScript
 interface Venta { registros: number; valor: number; }
@@ -121,7 +120,7 @@ const ventasMenuItems = [
   {
     label: 'Ventas Mensuales',
     icon: 'pi pi-chart-bar',
-    command: () => navigate('/ejemplo')
+    command: () => navigate('/ArticulosMasVendidos')
   }
 ];
 
@@ -309,14 +308,12 @@ content = (
 );
 
 }
-
   return (
   <div className="dashboard-page p-p-4">
 
     {content}
 
-  </div>
-  
+  </div> 
   );
 }
 

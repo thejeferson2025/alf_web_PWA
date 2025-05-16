@@ -5,12 +5,12 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Toast } from 'primereact/toast';
-import { useAuth } from './pages/login/AuthContext';
+import { useAuth } from './pages/security/AuthContext';
 import DashboardPage from './pages/dashboard';
-import PrivateRoute from './pages/login/PrivateRoute';
-import './App.css';
-import CardsGrid from './pages/ejemplo';
-import MainLayout from './Layouts/MainLayout';
+import PrivateRoute from './pages/security/PrivateRoute';
+import './styles/App.css';
+import MainLayout from './layouts/MainLayout';
+import ArticuloAltoValorPage from './pages/ventas/ArticulosMasVendidos';
 
 // Página de Login
 function LoginPage() {
@@ -103,7 +103,7 @@ function App() {
     <Routes>
       <Route path="/" element={ <LoginPage /> } />
       <Route path="/dashboard" element={ <><MainLayout /><PrivateRoute><DashboardPage /></PrivateRoute></> } />
-      <Route path="/ejemplo" element={<><PrivateRoute><CardsGrid /></PrivateRoute><MainLayout /></>} />
+      <Route path="/ArticulosMasVendidos" element={<><MainLayout /><PrivateRoute>< ArticuloAltoValorPage/></PrivateRoute></>} />
     </Routes>
   );
 }

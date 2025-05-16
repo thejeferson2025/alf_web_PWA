@@ -1,4 +1,4 @@
-import { VentaProducto } from '../interfaces/artiMasVendido'; // Asegúrate de que la ruta sea correcta
+import { VentaProducto } from '../interfaces/IArticulosMasVendido'; // Asegúrate de que la ruta sea correcta
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://181.199.86.43:7077'; // Sin la barra final si siempre la añades en los endpoints
 
 // Interfaces (pueden estar aquí o importarse de un archivo de modelos/tipos)

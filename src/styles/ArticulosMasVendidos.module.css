@@ -1,0 +1,134 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: -1rem; /* Ajusta este valor según necesites */
+}
+
+.titleContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.chartContainer {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.listContainer {
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 100%;
+}
+
+.loadingContainer,
+.noDataContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
+  font-style: italic;
+  color: #777;
+  text-align: center;
+}
+
+.noDataIcon {
+  margin-left: 0.5rem;
+}
+
+.articuloCard {
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.articuloHeader {
+  color: white;
+  padding: 0.75rem;
+  border-radius: 4px 4px 0 0;
+}
+
+.articuloBody {
+  padding: 1rem;
+}
+
+.articuloBody strong {
+  font-weight: bold;
+}
+
+/* Media query para pantallas medianas (tablets y superiores) */
+@media (min-width: 768px) {
+  .container {
+    padding-top: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin: 1rem auto;
+    margin-top: 0; /* Quitar el margen negativo en pantallas más grandes */
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .content {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .chartContainer {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .listContainer {
+    flex: 1;
+    max-height: 600px;
+  }
+}
+
+/* Opcional: Media query para pantallas grandes (desktops) si necesitas ajustes adicionales */
+@media (min-width: 1200px) {
+  .container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+}

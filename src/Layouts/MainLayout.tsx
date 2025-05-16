@@ -4,7 +4,7 @@ import { MenuItem } from "primereact/menuitem";
 import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
-import { useAuth } from "../pages/login/AuthContext";
+import { useAuth } from "../pages/security/AuthContext";
 import { useNavigate } from "react-router-dom";
 
  
@@ -16,7 +16,7 @@ export default function MainLayout() {
  const footerContent = (
         <div>
             <Button label="No" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" />
-            <Button label="Yes" icon="pi pi-check" onClick={() => handleLogout()} autoFocus />
+            <Button label="Si" icon="pi pi-check" onClick={() => handleLogout()} autoFocus />
         </div>
     );
 
