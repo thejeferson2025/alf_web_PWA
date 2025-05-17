@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { getArticulosAltoValor } from '../../services/apiServices';
 import { VentaProducto } from '../../interfaces/IArticulosMasVendido';
-import styles from '../../styles/ArticulosMasVendidos.module.css';
+import styles from '../../styles/ventas.module.css/ArticulosMasVendidos.module.css';
 
 export default function ArticuloAltoValorPage() {
     const [cargando, setCargando] = useState(true);

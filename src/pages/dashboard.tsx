@@ -37,21 +37,14 @@ const formatNumber = (amount: number): string => {
     }).format(amount);
 }
 
-
 export default function DashboardPage() {
-    
-    
-  
   const navigate = useNavigate();
-
   const [cargando, setCargando] = useState(true);
   const [ventas, setVentas] = useState<Venta[]>([]);
   const [compras, setCompras] = useState<Compra[]>([]);
   const [ctasPCobrar, setCtasPCobrar] = useState<PorCobrar | null>(null);
   const [ctasPPagar, setCtasPPagar] = useState<PorPagar | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-
 
   // --- Lógica de Obtención de Datos usando el servicio ---
   useEffect(() => {
@@ -110,17 +103,17 @@ const ventasMenuItems = [
   {
     label: 'Artículos más Vendidos',
     icon: 'pi pi-cart-plus',
-    command: () => navigate('/ArticulosMasVendidos')
+    command: () => navigate('/dashboard/ArticulosMasVendidos')
   },
   {
     label: 'Clientes más Rentables',
     icon: 'pi pi-users',
-    command: () => navigate('/clientesAltoValor')
+    command: () => navigate('/dashboard/ClientesMasRentables')
   },
   {
     label: 'Ventas Mensuales',
     icon: 'pi pi-chart-bar',
-    command: () => navigate('/ArticulosMasVendidos')
+    command: () => navigate('/dashboard/VentasMensuales')
   }
 ];
 

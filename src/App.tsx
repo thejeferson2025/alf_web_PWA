@@ -11,6 +11,7 @@ import PrivateRoute from './pages/security/PrivateRoute';
 import './styles/App.css';
 import MainLayout from './layouts/MainLayout';
 import ArticuloAltoValorPage from './pages/ventas/ArticulosMasVendidos';
+import ClientesAltoValorPage from './pages/ventas/ClientesMasRentables';
 
 // Página de Login
 function LoginPage() {
@@ -88,7 +89,7 @@ function LoginPage() {
             placeholder="Ingrese su contraseña"
             inputClassName="w-full"
           />
-          <Button label="Iniciar sesión" icon="pi pi-sign-in" iconPos="right" onClick={handleLogin} className="w-full mt-2" />
+          <Button label="Iniciar sesión" icon="pi pi-sign-in" onClick={handleLogin} className="w-full mt-2" />
         </div>
       </Card>
       <Toast ref={toast} />
@@ -103,7 +104,8 @@ function App() {
     <Routes>
       <Route path="/" element={ <LoginPage /> } />
       <Route path="/dashboard" element={ <><MainLayout /><PrivateRoute><DashboardPage /></PrivateRoute></> } />
-      <Route path="/ArticulosMasVendidos" element={<><MainLayout /><PrivateRoute>< ArticuloAltoValorPage/></PrivateRoute></>} />
+      <Route path="/dashboard/ArticulosMasVendidos" element={<><MainLayout /><PrivateRoute>< ArticuloAltoValorPage/></PrivateRoute></>} />
+        <Route path="/dashboard/ClientesMasRentables" element={<><MainLayout /><PrivateRoute>< ClientesAltoValorPage/></PrivateRoute></>} />
     </Routes>
   );
 }
