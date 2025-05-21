@@ -6,7 +6,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
 
-import { ClientesAltoValor } from '../../interfaces/IClientesMasRentables';
+import { ClientesAltoValor } from '../../interfaces/iventas/IClientesMasRentables';
 import { getClientesAltoValor } from '../../services/apiServices';
 import styles from '../../styles/ventas.module.css/ClientesMasRentables.module.css';
 

@@ -12,6 +12,7 @@ import './styles/App.css';
 import MainLayout from './layouts/MainLayout';
 import ArticuloAltoValorPage from './pages/ventas/ArticulosMasVendidos';
 import ClientesAltoValorPage from './pages/ventas/ClientesMasRentables';
+import VentasMensualesPage from './pages/ventas/VentasMensuales';
 
 // Página de Login
 function LoginPage() {
@@ -105,7 +106,8 @@ function App() {
       <Route path="/" element={ <LoginPage /> } />
       <Route path="/dashboard" element={ <><MainLayout /><PrivateRoute><DashboardPage /></PrivateRoute></> } />
       <Route path="/dashboard/ArticulosMasVendidos" element={<><MainLayout /><PrivateRoute>< ArticuloAltoValorPage/></PrivateRoute></>} />
-        <Route path="/dashboard/ClientesMasRentables" element={<><MainLayout /><PrivateRoute>< ClientesAltoValorPage/></PrivateRoute></>} />
+      <Route path="/dashboard/ClientesMasRentables" element={<><MainLayout /><PrivateRoute>< ClientesAltoValorPage/></PrivateRoute></>} />
+      <Route path="/dashboard/VentasMensuales" element={<><MainLayout /><PrivateRoute><VentasMensualesPage/></PrivateRoute></>} />
     </Routes>
   );
 }

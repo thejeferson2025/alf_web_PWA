@@ -4,7 +4,7 @@ import { Chart } from 'primereact/chart';
 import { useState, useEffect, useRef } from 'react';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { getArticulosAltoValor } from '../../services/apiServices';
-import { VentaProducto } from '../../interfaces/IArticulosMasVendido';
+import { VentaProducto } from '../../interfaces/iventas/IArticulosMasVendido';
 import styles from '../../styles/ventas.module.css/ArticulosMasVendidos.module.css';
 
 export default function ArticuloAltoValorPage() {

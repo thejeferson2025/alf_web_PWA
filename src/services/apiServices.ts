@@ -1,5 +1,6 @@
-import { VentaProducto } from '../interfaces/IArticulosMasVendido'; // Asegúrate de que la ruta sea correcta
-import { ClientesAltoValor } from '../interfaces/IClientesMasRentables';
+import { VentaProducto } from '../interfaces/iventas/IArticulosMasVendido'; // Asegúrate de que la ruta sea correcta
+import { ClientesAltoValor } from '../interfaces/iventas/IClientesMasRentables';
+import { VentasMensual } from '../interfaces/iventas/IVentasMensuales';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://181.199.86.43:7077'; // Sin la barra final si siempre la añades en los endpoints
 
 // Interfaces (pueden estar aquí o importarse de un archivo de modelos/tipos)
@@ -14,13 +15,11 @@ const fetchJson = async <T>(endpoint: string): Promise<T | null> => {
         const response = await fetch(`${API_BASE_URL}${endpoint}`);
         if (!response.ok) {
             console.error(`API Error: ${response.status} - ${response.statusText} for ${endpoint}`);
-            // Podrías lanzar un error aquí o devolver un tipo de resultado con error
             return null;
         }
         return response.json();
     } catch (error) {
         console.error(`Workspace Error for ${endpoint}:`, error);
-        // Podrías lanzar un error aquí o devolver un tipo de resultado con error
         return null;
     }
 };
@@ -50,4 +49,6 @@ export const getClientesAltoValor  = (): Promise<ClientesAltoValor[] | null> => 
 };
 
 
-
+export const getVentasMensuales = (): Promise<VentasMensual[] | null> => {
+     return fetchJson<VentasMensual[]>('/api/ventas/busqueda/total/mensual');
+};
