@@ -5,7 +5,7 @@ import { Toast } from 'primereact/toast';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
-
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { ClientesAltoValor } from '../../interfaces/iventas/IClientesMasRentables';
 import { getClientesAltoValor } from '../../services/apiServices';
 import styles from '../../styles/ventas.module.css/ClientesMasRentables.module.css';
@@ -104,14 +104,109 @@ const ClientesAltoValorPage = () => {
       label: 'Descargar PDF',
       icon: 'pi pi-file-pdf',
       command: () => {
+         createPdf(); 
         toastRef.current?.show({
-          severity: 'warn',
-          summary: 'Funcionalidad',
-          detail: 'Descarga de PDF pendiente de implementación',
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Descarga de PDF correcto',
         });
       }
     }
   ];
+
+async function createPdf() {
+  if (!clientes || clientes.length === 0) {
+    toastRef.current?.show({
+      severity: 'warn',
+      summary: 'Sin datos',
+      detail: 'No hay datos para generar el PDF.',
+    });
+    return;
+  }
+
+  const pdfDoc = await PDFDocument.create();
+  const font = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+
+  let page = pdfDoc.addPage();
+  const { width, height } = page.getSize();
+
+  const margin = 40;
+  const fontSize = 10;
+  const rowHeight = 20;
+  const tableStartY = height - 80;
+
+  let y = tableStartY;
+
+  // Título centrado
+  const title = `Clientes más rentables ${new Date().getFullYear()}`;
+  const titleSize = 16;
+  const titleWidth = boldFont.widthOfTextAtSize(title, titleSize);
+  page.drawText(title, {
+    x: (width - titleWidth) / 2,
+    y: y,
+    size: titleSize,
+    font: boldFont,
+    color: rgb(0, 0, 0),
+  });
+
+  y -= 2 * rowHeight;
+
+  // Encabezados
+  const headers = ['#', 'Cliente', 'Ventas', 'Total'];
+  const colWidths = [30, 200, 70, 100];
+  const xPositions = [margin, margin + colWidths[0], margin + colWidths[0] + colWidths[1], margin + colWidths[0] + colWidths[1] + colWidths[2]];
+
+  headers.forEach((text, i) => {
+    page.drawText(text, {
+      x: xPositions[i],
+      y: y,
+      size: fontSize + 1,
+      font: boldFont,
+      color: rgb(0, 0, 0),
+    });
+  });
+
+  y -= rowHeight;
+
+  // Cuerpo de la tabla
+  clientes.slice(0, 15).forEach((c, index) => {
+    const values = [
+      (index + 1).toString(),
+      c.cliente,
+      c.total_transacciones.toString(),
+      c.monto_total.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+    ];
+
+    values.forEach((text, i) => {
+      page.drawText(text, {
+        x: xPositions[i],
+        y: y,
+        size: fontSize,
+        font,
+        color: rgb(0, 0, 0),
+      });
+    });
+
+    y -= rowHeight;
+    if (y < 50) {
+      y = tableStartY;
+      page = pdfDoc.addPage();
+    }
+  });
+
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ClientesMasRentables_${new Date().getFullYear()}.pdf`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+
 
   return (
     <div className={styles.container}>
